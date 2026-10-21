@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رسالة سرية  💌</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Tahoma, Arial, sans-serif;
+      background: linear-gradient(145deg, #fff0f5, #ffd6e7, #fff5fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      color: #8d3158;
+      padding: 24px 14px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 430px;
+      text-align: center;
+    }
+
+    .sparkle {
+      font-size: 27px;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin: 12px 0;
+      color: #c04478;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      line-height: 1.9;
+      color: #a34c72;
+      margin-bottom: 28px;
+    }
+
+    .envelope-area {
+      position: relative;
+      width: min(290px, 85vw);
+      height: 205px;
+      margin: 0 auto 25px;
+      perspective: 900px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .envelope {
+      position: absolute;
+      inset: 40px 0 0;
+      height: 155px;
+      background: #f28ab5;
+      border-radius: 8px;
+      box-shadow: 0 13px 30px #d85d9138;
+    }
+
+    .letter {
+      position: absolute;
+      z-index: 2;
+      left: 8%;
+      width: 84%;
+      height: 130px;
+      top: 42px;
+      padding: 15px 10px;
+      background: #fffdfd;
+      border-radius: 7px;
+      transition: transform 1s ease, top 1s ease;
+      color: #ad4774;
+      font-size: 14px;
+      line-height: 1.8;
+      overflow: hidden;
+    }
+
+    .letter .mini-heart {
+      font-size: 23px;
+    }
+
+    .back {
+      position: absolute;
+      z-index: 3;
+      inset: 40px 0 0;
+      height: 155px;
+      background: #f8a4c5;
+      clip-path: polygon(0 0, 50% 58%, 100% 0);
+    }
+
+    .front {
+      position: absolute;
+      z-index: 4;
+      inset: 40px 0 0;
+      height: 155px;
+      background: #f6a0c2;
+      clip-path: polygon(0 100%, 0 0, 50% 59%, 100% 0, 100% 100%);
+      border-radius: 0 0 8px 8px;
+    }
+
+    .flap {
+      position: absolute;
+      z-index: 5;
+      top: 40px;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: #e96f9f;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.8s ease;
+    }
+
+    .seal {
+      position: absolute;
+      z-index: 6;
+      top: 112px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 43px;
+      height: 43px;
+      background: #d94e86;
+      border: 3px solid #ffc4db;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 23px;
+      transition: opacity 0.3s ease;
+      box-shadow: 0 3px 10px #9e245533;
+    }
+
+    .envelope-area.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-area.open .letter {
+      top: -35px;
+      height: 175px;
+      z-index: 7;
+      transition-delay: 0.35s;
+      box-shadow: 0 4px 16px #b8427320;
+    }
+
+    .envelope-area.open .seal {
+      opacity: 0;
+    }
+
+    .hint {
+      color: #b44d7c;
+      font-size: 14px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .message {
+      display: none;
+      background: #ffffffd9;
+      border: 1px solid #ffc4db;
+      border-radius: 22px;
+      padding: 23px 19px;
+      margin-top: 24px;
+      box-shadow: 0 10px 35px #c94f8420;
+      animation: appear 1s ease both;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message h2 {
+      font-size: 23px;
+      color: #ce4d83;
+      margin: 0 0 15px;
+    }
+
+    .message p {
+      font-size: 16px;
+      line-height: 2.1;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    .signature {
+      margin-top: 18px;
+      color: #d04d83;
+      font-weight: bold;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -35px;
+      animation: rise 4s linear forwards;
+      opacity: 0.9;
+    }
+
+    button {
+      border: none;
+      background: #d94e86;
+      color: white;
+      border-radius: 30px;
+      padding: 12px 23px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 17px;
+      box-shadow: 0 5px 15px #d94e8633;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    @keyframes float {
+      50% { transform: translateY(-7px) rotate(5deg); }
+    }
+
+    @keyframes pulse {
+      50% { opacity: 0.55; }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="page">
+    <div class="sparkle">✨ 💗 ✨</div>
+    <h1>فيه رسالة مخصوص ليكي!</h1>
+    <div class="subtitle">
+      حدّ بعتلك حاجة صغيرة من قلبه 💌<br>
+      يا ترى هتكون إيه؟
+    </div>
+
+    <div
+      class="envelope-area"
+      id="envelope"
+      role="button"
+      tabindex="0"
+      aria-label="اضغطي لفتح الظرف"
+      aria-expanded="false"
+    >
+      <div class="envelope"></div>
+
+      <div class="letter">
+        <div class="mini-heart">💌</div>
+        رسالة صغيرة ليكي...
+        <br>افتحي الظرف وشوفي المفاجأة!
+      </div>
+
+      <div class="back"></div>
+      <div class="front"></div>
+      <div class="flap"></div>
+      <div class="seal">♥</div>
+    </div>
+
+    <div class="hint" id="hint">اضغطي على الظرف عشان يفتح 👆</div>
+
+    <section class="message" id="message" aria-live="polite">
+      <div style="font-size: 35px; margin-bottom: 10px;">🌷💖🌷</div>
+      <h2 id="recipient">إلى 𝑀𝑟𝑠 𝑆𝑚𝑎ℎ ❤️</h2>
+
+      <p id="messageText">حضرتك مش مجرد ميس بتشرح درس،
+حضرتك ليكي أثر حلو وذكرى جميلة عندنا.
+شكرًا على تعبك ومجهودك وصبرك،
+وربنا يسعد قلبك زي ما بتفرّحي اللي حواليكي بجد حضرتك بتبذلي مجهود جامد معانا ودايما بتنصحينا كأننا عيالك. 🥹💗💗💗💗
+
+أتمنى لحضرتك أيام كلها نجاح وفرحة، 
+وتفضلي دايمًا سبب في إننا نحب نتعلم أكتر. 🌸</p>
+
+      <div class="signature">بكل الحب والتقدير 💕</div>
+      <button id="again" type="button">اقفلي المفاجأة 🤍</button>
+    </section>
+
+    <div style="font-size: 12px; color: #b96b8c; margin-top: 28px;">
+      معمول بكل الحب 💗
+    </div>
+  </main>
+
+  <script>
+    const envelope = document.getElementById("envelope");
+    const message = document.getElementById("message");
+    const hint = document.getElementById("hint");
+    const hearts = document.getElementById("hearts");
+    const again = document.getElementById("again");
+
+    function makeHearts() {
+      const symbols = ["💗", "💕", "💖", "🌸", "✨"];
+
+      for (let i = 0; i < 22; i++) {
+        const heart = document.createElement("span");
+        heart.className = "heart";
+        heart.textContent =
+          symbols[Math.floor(Math.random() * symbols.length)];
+
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.animationDelay = Math.random() * 2 + "s";
+        heart.style.fontSize = (16 + Math.random() * 18) + "px";
+
+        hearts.appendChild(heart);
+        setTimeout(() => heart.remove(), 6500);
+      }
+    }
+
+    function openEnvelope() {
+      if (envelope.classList.contains("open")) return;
+
+      envelope.classList.add("open");
+      envelope.setAttribute("aria-expanded", "true");
+      hint.textContent = "مفاجأة صغيرة من القلب 💖";
+
+      setTimeout(() => {
+        message.classList.add("show");
+        makeHearts();
+      }, 800);
+    }
+
+    function closeEnvelope() {
+      message.classList.remove("show");
+      envelope.classList.remove("open");
+      envelope.setAttribute("aria-expanded", "false");
+      hint.textContent = "اضغطي على الظرف عشان يفتح 👆";
+    }
+
+    envelope.addEventListener("click", openEnvelope);
+
+    envelope.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openEnvelope();
+      }
+    });
+
+    again.addEventListener("click", closeEnvelope);
+  </script>
+</body>
+  </html>
